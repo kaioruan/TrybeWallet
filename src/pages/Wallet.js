@@ -8,8 +8,11 @@ class Wallet extends React.Component {
   constructor() {
     super();
     this.state = {
-      despesa: 0,
+      despesa: '',
       descricao: '',
+      pagamento: '',
+      valor: 0,
+      moeda: null,
     };
   }
 
@@ -19,15 +22,16 @@ class Wallet extends React.Component {
   }
 
   handleChange = ({ target }) => {
-    const { name, value } = target;
+    const { name } = target;
+    const value = target.type === 'checkbox' ? target.checked : target.value;
     this.setState({
       [name]: value,
-    });
+    }, () => this.componentDidMount());
   }
 
   render() {
     const { coinList } = this.props;
-    const { despesa, descricao } = this.state;
+    const { despesa, descricao, pagamento, valor, moeda } = this.state;
     return (
       <section>
         <Header />
@@ -36,33 +40,53 @@ class Wallet extends React.Component {
             && (
               <div>
                 {' '}
-                <select>
-                  {coinList.map((coin, index) => (
-                    <option key={ index }>{ coin }</option>
-                  ))}
-                </select>
+                <label htmlFor="Moeda">
+                  Moeda
+                  <select
+                    onChange={ this.handleChange }
+                    name="moeda"
+                    value={ moeda }
+                    id="Moeda"
+                  >
+                    {coinList.map((coin, index) => (
+                      <option key={ index }>{ coin }</option>
+                    ))}
+                  </select>
+                </label>
 
               </div>
             )}
         </div>
         <input
           type="number"
-          name="despesa"
-          value={ despesa }
+          name="valor"
+          value={ valor }
           data-testid="value-input"
+          onChange={ this.handleChange }
         />
         <input
           type="text"
           name="descricao"
           value={ descricao }
           data-testid="description-input"
+          onChange={ this.handleChange }
         />
-        <select data-testid="method-input">
+        <select
+          data-testid="method-input"
+          onChange={ this.handleChange }
+          name="pagamento"
+          value={ pagamento }
+        >
           <option>Dinheiro</option>
           <option>Cartão de crédito</option>
           <option>Cartão de débito</option>
         </select>
-        <select data-testid="tag-input">
+        <select
+          data-testid="tag-input"
+          onChange={ this.handleChange }
+          name="despesa"
+          value={ despesa }
+        >
           <option>Alimentação</option>
           <option>Lazer</option>
           <option>Trabalho de débito</option>

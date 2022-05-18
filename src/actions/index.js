@@ -17,9 +17,11 @@ export const fetchCoin = () => async (dispatch) => {
   try {
     const response = await fetch('https://economia.awesomeapi.com.br/json/all');
     const result = await response.json();
+    // console.log(Object.entries(await result));
     const list = Object.keys(await result).filter((coin) => coin !== 'USDT');
+    // console.log(list);
     dispatch(setCoinList(list));
   } catch (error) {
-    console.log(error);
+    // console.log(error);
   }
 };
