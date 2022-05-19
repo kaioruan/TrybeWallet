@@ -1,4 +1,5 @@
 import { USER_DATA } from '../reducers/user';
+import { WALLET_DATA } from '../reducers/wallet';
 
 // Coloque aqui suas actions
 
@@ -17,10 +18,25 @@ export const fetchCoin = () => async (dispatch) => {
   try {
     const response = await fetch('https://economia.awesomeapi.com.br/json/all');
     const result = await response.json();
-    // console.log(Object.entries(await result));
     const list = Object.keys(await result).filter((coin) => coin !== 'USDT');
-    // console.log(list);
     dispatch(setCoinList(list));
+  } catch (error) {
+    // console.log(error);
+  }
+};
+
+export const setExpenseList = (payload, currencies) => ({
+  type: WALLET_DATA,
+  payload,
+  currencies,
+});
+
+export const fetchExpense = (payload) => async (dispatch) => {
+  try {
+    const response = await fetch('https://economia.awesomeapi.com.br/json/all');
+    const currencies = await response.json();
+    delete currencies.USDT;
+    dispatch(setExpenseList(payload, currencies));
   } catch (error) {
     // console.log(error);
   }

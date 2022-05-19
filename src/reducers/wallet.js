@@ -2,20 +2,22 @@ import { SET_COIN_LIST } from '../actions';
 
 // Esse reducer será responsável por tratar o todas as informações relacionadas as despesas
 const INITIAL_STATE = {
-  wallet: {
-    currencies: [],
-    expenses: [],
-  },
+  currencies: [],
+  expenses: [],
 };
 
 export const WALLET_DATA = 'WALLET_DATA';
+export const FETCH_DATA = 'FETCH_DATA';
 
 const setUserData = (state = INITIAL_STATE, action) => {
   switch (action.type) {
   case WALLET_DATA:
     return {
       ...state,
-      expenses: action.payload,
+      expenses: [...state.expenses, {
+        payload: action.payload,
+        exchangeRates: action.currencies,
+      }],
     };
   case SET_COIN_LIST:
     return {

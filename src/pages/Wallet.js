@@ -1,18 +1,21 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { fetchCoin } from '../actions';
+import { fetchExpense, fetchCoin } from '../actions';
 import Header from '../component/Header';
 
 class Wallet extends React.Component {
   constructor() {
     super();
     this.state = {
-      despesa: '',
-      descricao: '',
-      pagamento: '',
-      valor: 0,
-      moeda: null,
+      listaDespesa: {},
+      id: 0,
+      tag: 'Alimentação',
+      description: '',
+      method: 'Dinheiro',
+      value: 0,
+      currency: 'USD',
+      isDisabled: true,
     };
   }
 
@@ -23,15 +26,49 @@ class Wallet extends React.Component {
 
   handleChange = ({ target }) => {
     const { name } = target;
-    const value = target.type === 'checkbox' ? target.checked : target.value;
     this.setState({
-      [name]: value,
-    }, () => this.componentDidMount());
+      [name]: target.value,
+    }, () => {
+
+      const { tag, description, method, value, currency, id } = this.state;
+      const VALUE_MIN = 0;
+      const errorCase = [
+        tag.length <= VALUE_MIN,
+        description.length <= VALUE_MIN,
+        method.length <= VALUE_MIN,
+        value <= VALUE_MIN,
+        currency.length <= VALUE_MIN,
+      ];
+      const VerifyDisabled = errorCase.some((err) => err === true);
+      this.setState({
+        isDisabled: VerifyDisabled,
+        listaDespesa: {
+          id,
+          tag,
+          description,
+          method,
+          value,
+          currency,
+        },
+      });
+    });
+  }
+
+  handleSubmit = (event) => {
+    event.preventDefault();
+    const { listaDespesa, id } = this.state;
+    const { secondFetch } = this.props;
+    secondFetch(listaDespesa);
+    this.setState({
+      id: (id + 1),
+      value: 0,
+      description: '',
+    });
   }
 
   render() {
     const { coinList } = this.props;
-    const { despesa, descricao, pagamento, valor, moeda } = this.state;
+    const { tag, description, method, value, currency, isDisabled } = this.state;
     return (
       <section>
         <Header />
@@ -44,8 +81,8 @@ class Wallet extends React.Component {
                   Moeda
                   <select
                     onChange={ this.handleChange }
-                    name="moeda"
-                    value={ moeda }
+                    name="currency"
+                    value={ currency }
                     id="Moeda"
                   >
                     {coinList.map((coin, index) => (
@@ -59,23 +96,23 @@ class Wallet extends React.Component {
         </div>
         <input
           type="number"
-          name="valor"
-          value={ valor }
+          name="value"
+          value={ value }
           data-testid="value-input"
           onChange={ this.handleChange }
         />
         <input
           type="text"
-          name="descricao"
-          value={ descricao }
+          name="description"
+          value={ description }
           data-testid="description-input"
           onChange={ this.handleChange }
         />
         <select
           data-testid="method-input"
           onChange={ this.handleChange }
-          name="pagamento"
-          value={ pagamento }
+          name="method"
+          value={ method }
         >
           <option>Dinheiro</option>
           <option>Cartão de crédito</option>
@@ -84,8 +121,8 @@ class Wallet extends React.Component {
         <select
           data-testid="tag-input"
           onChange={ this.handleChange }
-          name="despesa"
-          value={ despesa }
+          name="tag"
+          value={ tag }
         >
           <option>Alimentação</option>
           <option>Lazer</option>
@@ -93,6 +130,13 @@ class Wallet extends React.Component {
           <option>Transporte</option>
           <option>Saúde</option>
         </select>
+        <button
+          type="submit"
+          disabled={ isDisabled }
+          onClick={ this.handleSubmit }
+        >
+          Adicionar despesa
+        </button>
       </section>
     );
   }
@@ -100,6 +144,7 @@ class Wallet extends React.Component {
 
 const mapDispatchToProps = (dispatch) => ({
   coinAPI: () => dispatch(fetchCoin()),
+  secondFetch: (despesa) => dispatch(fetchExpense(despesa)),
 });
 
 const mapStateToProps = (state) => ({
@@ -108,6 +153,7 @@ const mapStateToProps = (state) => ({
 
 Wallet.propTypes = {
   coinAPI: PropTypes.func.isRequired,
+  secondFetch: PropTypes.func.isRequired,
   coinList: PropTypes.arrayOf.isRequired,
 };
 
