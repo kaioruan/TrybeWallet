@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { fetchExpense, fetchCoin } from '../actions';
 import Header from '../component/Header';
+import Table from '../component/Table';
 
 class Wallet extends React.Component {
   constructor() {
@@ -69,74 +70,77 @@ class Wallet extends React.Component {
     const { coinList } = this.props;
     const { tag, description, method, value, currency, isDisabled } = this.state;
     return (
-      <section>
-        <Header />
-        <div>
-          { coinList
-            && (
-              <div>
-                {' '}
-                <label htmlFor="Moeda">
-                  Moeda
-                  <select
-                    onChange={ this.handleChange }
-                    name="currency"
-                    value={ currency }
-                    id="Moeda"
-                  >
-                    {coinList.map((coin, index) => (
-                      <option key={ index }>{ coin }</option>
-                    ))}
-                  </select>
-                </label>
+      <main>
+        <section>
+          <Header />
+          <div>
+            { coinList
+              && (
+                <div>
+                  {' '}
+                  <label htmlFor="Moeda">
+                    Moeda
+                    <select
+                      onChange={ this.handleChange }
+                      name="currency"
+                      value={ currency }
+                      id="Moeda"
+                    >
+                      {coinList.map((coin, index) => (
+                        <option key={ index }>{ coin }</option>
+                      ))}
+                    </select>
+                  </label>
 
-              </div>
-            )}
-        </div>
-        <input
-          type="number"
-          name="value"
-          value={ value }
-          data-testid="value-input"
-          onChange={ this.handleChange }
-        />
-        <input
-          type="text"
-          name="description"
-          value={ description }
-          data-testid="description-input"
-          onChange={ this.handleChange }
-        />
-        <select
-          data-testid="method-input"
-          onChange={ this.handleChange }
-          name="method"
-          value={ method }
-        >
-          <option>Dinheiro</option>
-          <option>Cartão de crédito</option>
-          <option>Cartão de débito</option>
-        </select>
-        <select
-          data-testid="tag-input"
-          onChange={ this.handleChange }
-          name="tag"
-          value={ tag }
-        >
-          <option>Alimentação</option>
-          <option>Lazer</option>
-          <option>Trabalho</option>
-          <option>Transporte</option>
-          <option>Saúde</option>
-        </select>
-        <button
-          type="submit"
-          disabled={ isDisabled }
-          onClick={ this.handleSubmit }
-        >
-          Adicionar despesa
-        </button>
-      </section>
+                </div>
+              )}
+          </div>
+          <input
+            type="number"
+            name="value"
+            value={ value }
+            data-testid="value-input"
+            onChange={ this.handleChange }
+          />
+          <input
+            type="text"
+            name="description"
+            value={ description }
+            data-testid="description-input"
+            onChange={ this.handleChange }
+          />
+          <select
+            data-testid="method-input"
+            onChange={ this.handleChange }
+            name="method"
+            value={ method }
+          >
+            <option>Dinheiro</option>
+            <option>Cartão de crédito</option>
+            <option>Cartão de débito</option>
+          </select>
+          <select
+            data-testid="tag-input"
+            onChange={ this.handleChange }
+            name="tag"
+            value={ tag }
+          >
+            <option>Alimentação</option>
+            <option>Lazer</option>
+            <option>Trabalho</option>
+            <option>Transporte</option>
+            <option>Saúde</option>
+          </select>
+          <button
+            type="submit"
+            disabled={ isDisabled }
+            onClick={ this.handleSubmit }
+          >
+            Adicionar despesa
+          </button>
+        </section>
+        <Table />
+      </main>
     );
   }
 }
