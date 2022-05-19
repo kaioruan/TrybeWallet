@@ -29,7 +29,6 @@ class Wallet extends React.Component {
     this.setState({
       [name]: target.value,
     }, () => {
-
       const { tag, description, method, value, currency, id } = this.state;
       const VALUE_MIN = 0;
       const errorCase = [
