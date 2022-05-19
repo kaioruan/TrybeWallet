@@ -125,7 +125,7 @@ class Wallet extends React.Component {
         >
           <option>Alimentação</option>
           <option>Lazer</option>
-          <option>Trabalho de débito</option>
+          <option>Trabalho</option>
           <option>Transporte</option>
           <option>Saúde</option>
         </select>

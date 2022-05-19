@@ -15,7 +15,7 @@ const setUserData = (state = INITIAL_STATE, action) => {
     return {
       ...state,
       expenses: [...state.expenses, {
-        payload: action.payload,
+        ...action.payload,
         exchangeRates: action.currencies,
       }],
     };

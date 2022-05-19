@@ -7,13 +7,13 @@ class Header extends React.Component {
     const { emailUsuario, expenses } = this.props;
     let soma = 0;
     expenses.forEach((exp) => {
-      soma += Number(exp.payload.value)
-      * Number(exp.exchangeRates[exp.payload.currency].ask);
+      soma += Number(exp.value)
+      * Number(exp.exchangeRates[exp.currency].ask);
     });
     return (
       <section>
         <div data-testid="email-field">{ emailUsuario }</div>
-        <span data-testid="header-currency-field">BRL</span>
+        <span data-testid="header-currency-field">BRL: </span>
         <span data-testid="total-field">{ soma.toFixed(2) }</span>
       </section>
     );
