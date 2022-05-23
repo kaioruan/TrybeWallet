@@ -4,6 +4,7 @@ import { WALLET_DATA } from '../reducers/wallet';
 // Coloque aqui suas actions
 
 export const SET_COIN_LIST = 'SET_COIN_LIST';
+export const SET_DELETE_ITEM = 'SET_DELETE_ITEM';
 export const saveUserEmail = (email) => ({
   type: USER_DATA,
   payload: email,
@@ -41,3 +42,8 @@ export const fetchExpense = (payload) => async (dispatch) => {
     // console.log(error);
   }
 };
+
+export const deleteItem = (list) => ({
+  type: SET_DELETE_ITEM,
+  payload: list,
+});

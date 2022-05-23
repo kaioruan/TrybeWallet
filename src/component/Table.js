@@ -1,8 +1,16 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { deleteItem } from '../actions';
 
 class Table extends Component {
+  delete = ({ target }) => {
+    const { name } = target;
+    const { expenses, deletItem } = this.props;
+    const newList = expenses.filter((el) => el.id !== Number(name));
+    deletItem(newList);
+  }
+
   render() {
     const { expenses } = this.props;
     return (
@@ -24,7 +32,6 @@ class Table extends Component {
           {expenses.map((exp) => {
             const currenciesSearch = Object.entries(exp.exchangeRates)
               .find((currency) => currency[0] === exp.currency);
-            console.log(currenciesSearch);
             const nameCurrencie = currenciesSearch[1].name.split('/');
             const currencieValue = currenciesSearch[1].ask;
             const total = exp.value * currencieValue;
@@ -38,6 +45,18 @@ class Table extends Component {
                 <td>{Number(currencieValue).toFixed(2)}</td>
                 <td>{total.toFixed(2)}</td>
                 <td>Real</td>
+                <td>
+                  {' '}
+                  <button
+                    type="button"
+                    name={ exp.id }
+                    data-testid="delete-btn"
+                    onClick={ this.delete }
+                  >
+                    X
+                  </button>
+
+                </td>
               </tr>);
           })}
         </tbody>
@@ -50,8 +69,13 @@ const mapStateToProps = (state) => ({
   expenses: state.wallet.expenses,
 });
 
+const mapDispatchToProps = (dispatch) => ({
+  deletItem: (despesas) => dispatch(deleteItem(despesas)),
+});
+
 Table.propTypes = {
   expenses: PropTypes.arrayOf.isRequired,
+  deletItem: PropTypes.func.isRequired,
 };
 
-export default connect(mapStateToProps)(Table);
+export default connect(mapStateToProps, mapDispatchToProps)(Table);

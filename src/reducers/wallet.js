@@ -1,4 +1,4 @@
-import { SET_COIN_LIST } from '../actions';
+import { SET_COIN_LIST, SET_DELETE_ITEM } from '../actions';
 
 // Esse reducer será responsável por tratar o todas as informações relacionadas as despesas
 const INITIAL_STATE = {
@@ -23,6 +23,11 @@ const setUserData = (state = INITIAL_STATE, action) => {
     return {
       ...state,
       currencies: action.payload,
+    };
+  case SET_DELETE_ITEM:
+    return {
+      ...state,
+      expenses: action.payload,
     };
   default:
     return state;
